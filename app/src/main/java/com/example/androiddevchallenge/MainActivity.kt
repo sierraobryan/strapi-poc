@@ -17,45 +17,65 @@ package com.example.androiddevchallenge
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.androiddevchallenge.network.firebase.AuthInteractor
+import com.example.androiddevchallenge.ui.AuthenticationViewModel
+import com.example.androiddevchallenge.ui.Screen
+import com.example.androiddevchallenge.ui.screens.authentication.AuthenticationScreen
+import com.example.androiddevchallenge.ui.screens.ContentScreen
+import com.example.androiddevchallenge.ui.screens.authentication.CreateAccountScreen
+import com.example.androiddevchallenge.ui.screens.authentication.LoginScreen
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    private val authenticationViewModel: AuthenticationViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             MyTheme {
-                MyApp()
+                MyApp {
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.AuthenticationScreen.route
+                    ) {
+                        composable(Screen.AuthenticationScreen.route) {
+                            AuthenticationScreen(navController)
+                        }
+                        composable(Screen.LoginScreen.route) {
+                            LoginScreen(
+                                navController = navController,
+                                authenticationViewModel = authenticationViewModel)
+                        }
+                        composable(Screen.CreateAccountScreen.route) {
+                            CreateAccountScreen(
+                                navController = navController,
+                                authenticationViewModel = authenticationViewModel
+                            )
+                        }
+                        composable(Screen.ContentScreen.route) { ContentScreen() }
+                    }
+                }
             }
         }
     }
 }
 
-// Start building your app here!
 @Composable
-fun MyApp() {
+fun MyApp(content: @Composable () -> Unit) {
     Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
-    }
-}
-
-@Preview("Light Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun LightPreview() {
-    MyTheme {
-        MyApp()
-    }
-}
-
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun DarkPreview() {
-    MyTheme(darkTheme = true) {
-        MyApp()
+        content()
     }
 }

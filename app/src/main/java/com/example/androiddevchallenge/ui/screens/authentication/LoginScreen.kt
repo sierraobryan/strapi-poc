@@ -8,7 +8,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.androiddevchallenge.ui.AuthenticationViewModel
 import com.example.androiddevchallenge.ui.Screen
 import com.example.androiddevchallenge.ui.components.LogoFooter
 import com.example.androiddevchallenge.ui.components.StrapiButton

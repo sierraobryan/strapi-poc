@@ -1,4 +1,4 @@
-package com.example.androiddevchallenge.ui
+package com.example.androiddevchallenge.ui.screens.authentication
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,32 +11,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthenticationViewModel @Inject constructor(
-    private val authInteractor: AuthInteractor
+    private val authenticationRepository: AuthenticationRepository
 ) : ViewModel() {
 
     val authenticated = MutableStateFlow(false)
 
     fun createAccount() {
         viewModelScope.launch {
-            val user = authInteractor.createAccount(
+            val success = authenticationRepository.createAccount(
                 "email",
-            "password"
+                "password"
             )
-            getAndSaveToken()
-            authenticated.value = user != null
+            authenticated.value = success
         }
     }
 
     fun signIn() {
         viewModelScope.launch {
-            val user = authInteractor.signIn(
+            val success = authenticationRepository.signIn(
                 "email",
                 "password"
             )
-            val tokenSaved = getAndSaveToken()
-            authenticated.value = tokenSaved
+            authenticated.value = success
         }
     }
-
-    private suspend fun getAndSaveToken() = authInteractor.getAndSaveToken()
 }

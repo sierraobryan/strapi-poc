@@ -1,6 +1,6 @@
 package com.example.androiddevchallenge.app
 
-import com.example.androiddevchallenge.ContentRepository
+import com.example.androiddevchallenge.data.ContentRepository
 import com.example.androiddevchallenge.data.AuthenticationRepository
 import com.example.androiddevchallenge.network.firebase.AuthInteractor
 import com.example.androiddevchallenge.network.strapi.StrapiService
@@ -46,14 +46,14 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepo(): AuthenticationRepository {
-        return AuthenticationRepository()
+    fun provideAuthInteractor(): AuthInteractor {
+        return AuthInteractor()
     }
 
     @Provides
     @Singleton
-    fun provideAuthInteractor(authenticationRepository: AuthenticationRepository): AuthInteractor {
-        return AuthInteractor(authenticationRepository = authenticationRepository)
+    fun provideAuthenticationRepository(authInteractor: AuthInteractor): AuthenticationRepository {
+        return AuthenticationRepository(authInteractor)
     }
 
     @Provides

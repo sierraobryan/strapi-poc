@@ -1,4 +1,4 @@
-package com.example.androiddevchallenge.ui.screens
+package com.example.androiddevchallenge.ui.screens.content
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn

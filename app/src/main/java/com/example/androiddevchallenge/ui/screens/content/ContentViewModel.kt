@@ -1,9 +1,8 @@
-package com.example.androiddevchallenge.ui.screens
+package com.example.androiddevchallenge.ui.screens.content
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.androiddevchallenge.ContentRepository
+import com.example.androiddevchallenge.data.ContentRepository
 import com.example.androiddevchallenge.data.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

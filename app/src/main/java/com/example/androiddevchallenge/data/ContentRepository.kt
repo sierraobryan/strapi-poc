@@ -1,6 +1,5 @@
-package com.example.androiddevchallenge
+package com.example.androiddevchallenge.data
 
-import com.example.androiddevchallenge.data.AuthenticationRepository
 import com.example.androiddevchallenge.data.model.Product
 import com.example.androiddevchallenge.network.strapi.StrapiService
 import retrofit2.Response
@@ -12,6 +11,8 @@ class ContentRepository @Inject constructor(
 )  {
 
     suspend fun getContent(): Response<List<Product>> {
-        return strapiService.getContent("Bearer ${authenticationRepository.token}")
+        return strapiService.getContent(
+            "Bearer ${authenticationRepository.getAuthToken()}"
+        )
     }
 }

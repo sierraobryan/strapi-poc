@@ -8,9 +8,7 @@ import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
 
-class AuthInteractor @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository
-) {
+class AuthInteractor {
 
     private val auth: FirebaseAuth = Firebase.auth
 
@@ -52,15 +50,9 @@ class AuthInteractor @Inject constructor(
         }
     }
 
-    suspend fun getAndSaveToken() = suspendCoroutine<Boolean> { continuation ->
+    suspend fun getAndSaveToken() = suspendCoroutine<String?> { continuation ->
         getCurrentUser()?.getIdToken(true)?.addOnSuccessListener {
-            val token = it.token
-            if (token != null) {
-                authenticationRepository.saveToken(token)
-                continuation.resumeWith(Result.success(true))
-            } else {
-                continuation.resumeWith(Result.success(false))
-            }
+            continuation.resumeWith(Result.success(it.token))
         }?.addOnFailureListener {
             continuation.resumeWith(Result.failure(it))
         }

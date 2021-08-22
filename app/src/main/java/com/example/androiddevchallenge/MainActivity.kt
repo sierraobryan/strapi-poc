@@ -31,6 +31,7 @@ import com.example.androiddevchallenge.ui.AuthenticationViewModel
 import com.example.androiddevchallenge.ui.Screen
 import com.example.androiddevchallenge.ui.screens.authentication.AuthenticationScreen
 import com.example.androiddevchallenge.ui.screens.ContentScreen
+import com.example.androiddevchallenge.ui.screens.ContentViewModel
 import com.example.androiddevchallenge.ui.screens.authentication.CreateAccountScreen
 import com.example.androiddevchallenge.ui.screens.authentication.LoginScreen
 import com.example.androiddevchallenge.ui.theme.MyTheme
@@ -40,6 +41,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val authenticationViewModel: AuthenticationViewModel by viewModels()
+    private val contentViewModel: ContentViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                                 authenticationViewModel = authenticationViewModel
                             )
                         }
-                        composable(Screen.ContentScreen.route) { ContentScreen() }
+                        composable(Screen.ContentScreen.route) { ContentScreen(contentViewModel) }
                     }
                 }
             }

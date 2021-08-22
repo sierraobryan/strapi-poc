@@ -2,10 +2,9 @@ package com.example.androiddevchallenge.data
 
 class AuthenticationRepository {
 
-    private var _token: String = ""
-    val token = _token
+    var token: String = ""
 
     fun saveToken(token: String) {
-        _token = token
+        this.token = token
     }
 }

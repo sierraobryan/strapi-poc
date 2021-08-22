@@ -2,6 +2,7 @@ package com.example.androiddevchallenge.app
 
 import com.example.androiddevchallenge.ContentRepository
 import com.example.androiddevchallenge.data.AuthenticationRepository
+import com.example.androiddevchallenge.network.firebase.AuthInteractor
 import com.example.androiddevchallenge.network.strapi.StrapiService
 import dagger.Module
 import dagger.Provides
@@ -32,7 +33,7 @@ class NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("http://localhost:1337/")
+            .baseUrl("http://10.0.2.2:1337/")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
@@ -47,6 +48,12 @@ class NetworkModule {
     @Singleton
     fun provideAuthRepo(): AuthenticationRepository {
         return AuthenticationRepository()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthInteractor(authenticationRepository: AuthenticationRepository): AuthInteractor {
+        return AuthInteractor(authenticationRepository = authenticationRepository)
     }
 
     @Provides

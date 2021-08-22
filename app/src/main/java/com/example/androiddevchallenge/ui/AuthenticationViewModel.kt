@@ -11,10 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthenticationViewModel @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository
+    private val authInteractor: AuthInteractor
 ) : ViewModel() {
-    
-    private val authInteractor = AuthInteractor()
 
     val authenticated = MutableStateFlow(false)
 
@@ -35,11 +33,10 @@ class AuthenticationViewModel @Inject constructor(
                 "email",
                 "password"
             )
-            getAndSaveToken()
-            authenticated.value = user != null
+            val tokenSaved = getAndSaveToken()
+            authenticated.value = tokenSaved
         }
     }
 
-    private suspend fun getAndSaveToken() =
-        authenticationRepository.saveToken(authInteractor.getToken() ?: "")
+    private suspend fun getAndSaveToken() = authInteractor.getAndSaveToken()
 }

@@ -1,10 +1,13 @@
 package com.example.androiddevchallenge.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun StrapiButton(
@@ -15,10 +18,19 @@ fun StrapiButton(
 ) {
     Button(
         modifier = modifier.fillMaxWidth(),
-        onClick = onClick
+        onClick = onClick,
+        colors = if (inverseColors)
+            ButtonDefaults.buttonColors(
+                backgroundColor = Color.White,
+                contentColor = MaterialTheme.colors.primary
+            )
+        else ButtonDefaults.buttonColors()
     ) {
         Text(
-            text = text
+            text = text,
+            style = TextStyle(
+                fontSize = 20.sp
+            )
         )
     }
 }

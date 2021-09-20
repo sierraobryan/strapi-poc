@@ -17,7 +17,7 @@ fun CreateAccountScreen(
     authenticationViewModel: AuthenticationViewModel,
     navController: NavController
 ) {
-    val state by authenticationViewModel.screenState.collectAsState()
+    val state by authenticationViewModel.createAccountLoginScreenState.collectAsState()
 
     if (state.authenticated) navController.navigate(Screen.ContentScreen.route)
 

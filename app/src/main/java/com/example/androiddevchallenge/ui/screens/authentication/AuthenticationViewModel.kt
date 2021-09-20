@@ -3,8 +3,8 @@ package com.example.androiddevchallenge.ui.screens.authentication
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androiddevchallenge.data.AuthenticationRepository
+import com.example.androiddevchallenge.data.model.CreateAccountScreenState
 import com.example.androiddevchallenge.data.model.LoginScreenState
-import com.example.androiddevchallenge.network.firebase.AuthInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -15,9 +15,10 @@ class AuthenticationViewModel @Inject constructor(
     private val authenticationRepository: AuthenticationRepository
 ) : ViewModel() {
 
-    val screenState = MutableStateFlow(
-        LoginScreenState()
-    )
+    val screenState = MutableStateFlow(LoginScreenState())
+
+    val createAccountLoginScreenState =
+        MutableStateFlow(CreateAccountScreenState())
 
     fun createAccount() {
         viewModelScope.launch {
@@ -46,19 +47,20 @@ class AuthenticationViewModel @Inject constructor(
     fun updateAndValidateEmail(email: String) {
         screenState.value = screenState.value.copy(
             email = email,
-            buttonEnabled = validateEmailAndPassword()
+            buttonEnabled = validateEmailAndPassword(email = email)
         )
     }
 
     fun updateAndValidatePassword(password: String) {
         screenState.value = screenState.value.copy(
             password = password,
-            buttonEnabled = validateEmailAndPassword()
+            buttonEnabled = validateEmailAndPassword(password = password)
         )
     }
 
-    private fun validateEmailAndPassword() =
-        android.util.Patterns.EMAIL_ADDRESS.matcher(
-            screenState.value.email
-        ).matches() && screenState.value.password.isNotBlank()
+    private fun validateEmailAndPassword(
+        email: String = screenState.value.email,
+        password: String = screenState.value.password
+    ) = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+            password.isNotBlank()
 }

@@ -6,3 +6,10 @@ data class LoginScreenState(
     val buttonEnabled: Boolean = false,
     val authenticated: Boolean = false
 )
+
+data class CreateAccountScreenState(
+    val email: String = "",
+    val password: String = "",
+    val buttonEnabled: Boolean = false,
+    val authenticated: Boolean = false
+)

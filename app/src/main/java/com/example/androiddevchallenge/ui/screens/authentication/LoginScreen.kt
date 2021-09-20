@@ -78,10 +78,9 @@ fun LoginScreen(
             modifier = Modifier.focusRequester(passwordFocusRequest),
             keyboardActions = KeyboardActions(
                 onNext = {
+                    keyboardController?.hide()
                     if (state.buttonEnabled) {
                         authenticationViewModel.signIn()
-                    } else {
-                        keyboardController?.hide()
                     }
                 }
             )

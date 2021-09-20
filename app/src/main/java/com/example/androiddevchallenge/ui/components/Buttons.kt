@@ -14,6 +14,7 @@ fun StrapiButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     inverseColors: Boolean = false,
 ) {
     Button(
@@ -24,7 +25,8 @@ fun StrapiButton(
                 backgroundColor = Color.White,
                 contentColor = MaterialTheme.colors.primary
             )
-        else ButtonDefaults.buttonColors()
+        else ButtonDefaults.buttonColors(),
+        enabled = enabled
     ) {
         Text(
             text = text,

@@ -17,9 +17,9 @@ fun CreateAccountScreen(
     authenticationViewModel: AuthenticationViewModel,
     navController: NavController
 ) {
-    val authenticated by authenticationViewModel.authenticated.collectAsState()
+    val state by authenticationViewModel.screenState.collectAsState()
 
-    if (authenticated) navController.navigate(Screen.ContentScreen.route)
+    if (state.authenticated) navController.navigate(Screen.ContentScreen.route)
 
     Column(
         modifier = Modifier.fillMaxSize()

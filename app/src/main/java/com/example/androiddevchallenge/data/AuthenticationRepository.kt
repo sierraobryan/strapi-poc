@@ -9,7 +9,17 @@ class AuthenticationRepository @Inject constructor(
 
     private var token: String = ""
 
+    fun getSignInClient() = authInteractor.googleSignInClient
+
     fun getAuthToken() = token
+
+    suspend fun authenticateWithGoogle(token: String): Boolean {
+        val user = authInteractor.authWithGoogle(token = token)
+        if (user != null) {
+            return getAndSaveToken()
+        }
+        return false
+    }
 
     suspend fun signIn(email: String, password: String): Boolean {
         val user = authInteractor.signIn(email = email, password = password)

@@ -3,7 +3,6 @@ package com.example.androiddevchallenge.ui.screens.authentication
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androiddevchallenge.data.AuthenticationRepository
-import com.example.androiddevchallenge.data.model.CreateAccountScreenState
 import com.example.androiddevchallenge.data.model.LoginScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +16,8 @@ class LoginViewModel @Inject constructor(
 
     val screenState = MutableStateFlow(LoginScreenState())
 
+    val signInIntent = authenticationRepository.getSignInClient().signInIntent
+
     fun signIn() {
         viewModelScope.launch {
             val success = authenticationRepository.signIn(
@@ -26,6 +27,17 @@ class LoginViewModel @Inject constructor(
             screenState.value = screenState.value.copy(
                 authenticated = success
             )
+        }
+    }
+
+    fun authenticateWithGoogle(token: String?) {
+        token?.let {
+            viewModelScope.launch {
+                val success = authenticationRepository.authenticateWithGoogle(it)
+                screenState.value = screenState.value.copy(
+                    authenticated = success
+                )
+            }
         }
     }
 

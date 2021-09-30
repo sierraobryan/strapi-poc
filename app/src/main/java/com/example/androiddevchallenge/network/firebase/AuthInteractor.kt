@@ -1,18 +1,45 @@
 package com.example.androiddevchallenge.network.firebase
 
-import com.example.androiddevchallenge.data.AuthenticationRepository
+import android.content.Context
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
 
-class AuthInteractor {
+class AuthInteractor @Inject constructor(private val context: Context) {
 
     private val auth: FirebaseAuth = Firebase.auth
 
     private fun getCurrentUser() = auth.currentUser
+
+    val googleSignInClient: GoogleSignInClient
+
+    init {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken("client id")
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(context, gso)
+    }
+
+    suspend fun authWithGoogle(
+        token: String
+    ): FirebaseUser? = suspendCoroutine { continuation ->
+        val credential = GoogleAuthProvider.getCredential(token, null)
+        auth.signInWithCredential(credential)
+            .addOnSuccessListener {
+                continuation.resumeWith(Result.success(auth.currentUser))
+            }.addOnFailureListener {
+                continuation.resumeWith(Result.failure(it))
+            }
+    }
 
     suspend fun createAccount(
         email: String = "sierrarobryan+2@gmail.com",

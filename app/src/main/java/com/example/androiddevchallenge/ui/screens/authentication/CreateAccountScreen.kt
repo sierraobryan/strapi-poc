@@ -1,5 +1,8 @@
 package com.example.androiddevchallenge.ui.screens.authentication
 
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Text
@@ -23,6 +26,8 @@ import com.example.androiddevchallenge.ui.components.LogoFooter
 import com.example.androiddevchallenge.ui.components.StrapiButton
 import com.example.androiddevchallenge.ui.components.StrapiTextField
 import com.example.androiddevchallenge.ui.theme.typography
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 
 @ExperimentalComposeUiApi
 @Composable
@@ -34,6 +39,18 @@ fun CreateAccountScreen(
 
     val passwordFocusRequest = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        try {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+            val account = task.getResult(ApiException::class.java)!!
+            viewModel.authenticateWithGoogle(account.idToken)
+        } catch (e: ApiException) {
+            Log.e("ApiException", e.message ?: "uh oh")
+        }
+    }
 
     if (state.authenticated) navController.navigate(Screen.ContentScreen.route)
 
@@ -85,6 +102,11 @@ fun CreateAccountScreen(
         StrapiButton(
             text = "Create Account",
             onClick = { viewModel.createAccount() }
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        StrapiButton(
+            text = "Log in with Google",
+            onClick = { launcher.launch(viewModel.signInIntent) }
         )
         LogoFooter()
     }

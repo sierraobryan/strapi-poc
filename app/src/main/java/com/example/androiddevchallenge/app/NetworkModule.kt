@@ -1,5 +1,6 @@
 package com.example.androiddevchallenge.app
 
+import android.content.Context
 import com.example.androiddevchallenge.data.ContentRepository
 import com.example.androiddevchallenge.data.AuthenticationRepository
 import com.example.androiddevchallenge.network.firebase.AuthInteractor
@@ -7,6 +8,7 @@ import com.example.androiddevchallenge.network.strapi.StrapiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -46,8 +48,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthInteractor(): AuthInteractor {
-        return AuthInteractor()
+    fun provideAuthInteractor(@ApplicationContext appContext: Context): AuthInteractor {
+        return AuthInteractor(context = appContext)
     }
 
     @Provides

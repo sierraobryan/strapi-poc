@@ -17,6 +17,19 @@ class CreateAccountViewModel @Inject constructor(
     val screenState =
         MutableStateFlow(CreateAccountScreenState())
 
+    val signInIntent = authenticationRepository.getSignInClient().signInIntent
+
+    fun authenticateWithGoogle(token: String?) {
+        token?.let {
+            viewModelScope.launch {
+                val success = authenticationRepository.authenticateWithGoogle(it)
+                screenState.value = screenState.value.copy(
+                    authenticated = success
+                )
+            }
+        }
+    }
+
     fun createAccount() {
         viewModelScope.launch {
             val success = authenticationRepository.createAccount(

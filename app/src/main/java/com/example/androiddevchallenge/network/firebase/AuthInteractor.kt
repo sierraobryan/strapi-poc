@@ -42,8 +42,8 @@ class AuthInteractor @Inject constructor(private val context: Context) {
     }
 
     suspend fun createAccount(
-        email: String = "sierrarobryan+2@gmail.com",
-        password: String = "Password1234!"
+        email: String,
+        password: String,
     ): FirebaseUser? = suspendCoroutine { continuation ->
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {

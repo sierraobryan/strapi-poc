@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import com.example.androiddevchallenge.ui.Screen
 import com.example.androiddevchallenge.ui.components.LogoFooter
 import com.example.androiddevchallenge.ui.components.LogoHeader
+import com.example.androiddevchallenge.ui.components.SkipButton
 import com.example.androiddevchallenge.ui.components.StrapiButton
 import com.example.androiddevchallenge.ui.theme.typography
 
@@ -49,6 +50,15 @@ fun AuthenticationScreen(navController: NavController) {
             inverseColors = true,
             onClick = { navController.navigate(Screen.CreateAccountScreen.route) }
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            SkipButton {
+                navController.navigate(Screen.ContentScreen.route)
+            }
+        }
         LogoFooter()
     }
 

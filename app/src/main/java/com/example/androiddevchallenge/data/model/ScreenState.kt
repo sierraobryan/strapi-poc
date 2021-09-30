@@ -13,3 +13,8 @@ data class CreateAccountScreenState(
     val buttonEnabled: Boolean = false,
     val authenticated: Boolean = false
 )
+
+data class ContentScreenState(
+    val products: List<Product> = emptyList(),
+    val error: Boolean = false
+)

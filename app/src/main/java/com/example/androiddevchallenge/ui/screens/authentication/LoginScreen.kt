@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -28,10 +27,10 @@ import com.example.androiddevchallenge.ui.theme.typography
 @ExperimentalComposeUiApi
 @Composable
 fun LoginScreen(
-    authenticationViewModel: AuthenticationViewModel,
+    loginViewModel: LoginViewModel,
     navController: NavController
 ) {
-    val state by authenticationViewModel.screenState.collectAsState()
+    val state by loginViewModel.screenState.collectAsState()
 
     val passwordFocusRequest = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -56,7 +55,7 @@ fun LoginScreen(
         StrapiTextField(
             value = state.email,
             onValueChanged = {
-                authenticationViewModel.updateAndValidateEmail(it)
+                loginViewModel.updateAndValidateEmail(it)
             },
             placeholder = { Text(text = "Email Address") },
             icon = Icons.Outlined.Email,
@@ -70,7 +69,7 @@ fun LoginScreen(
         StrapiTextField(
             value = state.password,
             onValueChanged = {
-                authenticationViewModel.updateAndValidatePassword(it)
+                loginViewModel.updateAndValidatePassword(it)
             },
             placeholder = { Text(text = "Password") },
             icon = Icons.Outlined.Lock,
@@ -80,7 +79,7 @@ fun LoginScreen(
                 onNext = {
                     keyboardController?.hide()
                     if (state.buttonEnabled) {
-                        authenticationViewModel.signIn()
+                        loginViewModel.signIn()
                     }
                 }
             )
@@ -90,7 +89,7 @@ fun LoginScreen(
             text = "Login",
             enabled = state.buttonEnabled,
             onClick = {
-                authenticationViewModel.signIn()
+                loginViewModel.signIn()
             }
         )
         LogoFooter()

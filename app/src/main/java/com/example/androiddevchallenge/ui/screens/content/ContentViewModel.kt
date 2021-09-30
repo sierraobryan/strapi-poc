@@ -3,6 +3,7 @@ package com.example.androiddevchallenge.ui.screens.content
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androiddevchallenge.data.ContentRepository
+import com.example.androiddevchallenge.data.model.ContentScreenState
 import com.example.androiddevchallenge.data.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +18,7 @@ class ContentViewModel @Inject constructor(
 
     private var fetched = false
 
-    private val _productState: MutableStateFlow<List<Product>> = MutableStateFlow(emptyList())
-    val productState: StateFlow<List<Product>> = _productState
+    val screenState = MutableStateFlow(ContentScreenState())
 
     init {
         getProducts()
@@ -29,8 +29,14 @@ class ContentViewModel @Inject constructor(
             fetched = true
             viewModelScope.launch {
                 val content = contentRepository.getContent()
-                if (content.body() != null && content.body() != _productState.value) {
-                    _productState.value = content.body() ?: emptyList()
+                if (content.body() != null && content.body() != screenState.value.products) {
+                    screenState.value = screenState.value.copy(
+                        products = content.body() ?: emptyList()
+                    )
+                } else if (content.errorBody() != null) {
+                    screenState.value = screenState.value.copy(
+                        error = true
+                    )
                 }
             }
         }

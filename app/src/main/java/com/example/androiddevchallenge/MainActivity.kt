@@ -22,25 +22,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.androiddevchallenge.ui.screens.authentication.AuthenticationViewModel
 import com.example.androiddevchallenge.ui.Screen
-import com.example.androiddevchallenge.ui.screens.authentication.AuthenticationScreen
+import com.example.androiddevchallenge.ui.screens.authentication.*
 import com.example.androiddevchallenge.ui.screens.content.ContentScreen
 import com.example.androiddevchallenge.ui.screens.content.ContentViewModel
-import com.example.androiddevchallenge.ui.screens.authentication.CreateAccountScreen
-import com.example.androiddevchallenge.ui.screens.authentication.LoginScreen
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val authenticationViewModel: AuthenticationViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
+    private val createAccountViewModel: CreateAccountViewModel by viewModels()
     private val contentViewModel: ContentViewModel by viewModels()
 
+    @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -57,12 +57,12 @@ class MainActivity : AppCompatActivity() {
                         composable(Screen.LoginScreen.route) {
                             LoginScreen(
                                 navController = navController,
-                                authenticationViewModel = authenticationViewModel)
+                                loginViewModel = loginViewModel)
                         }
                         composable(Screen.CreateAccountScreen.route) {
                             CreateAccountScreen(
                                 navController = navController,
-                                authenticationViewModel = authenticationViewModel
+                                viewModel = createAccountViewModel
                             )
                         }
                         composable(Screen.ContentScreen.route) { ContentScreen(contentViewModel) }

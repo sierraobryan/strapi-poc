@@ -1,34 +1,90 @@
 package com.example.androiddevchallenge.ui.screens.authentication
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.androiddevchallenge.ui.Screen
 import com.example.androiddevchallenge.ui.components.LogoFooter
 import com.example.androiddevchallenge.ui.components.StrapiButton
+import com.example.androiddevchallenge.ui.components.StrapiTextField
+import com.example.androiddevchallenge.ui.theme.typography
 
+@ExperimentalComposeUiApi
 @Composable
 fun CreateAccountScreen(
-    authenticationViewModel: AuthenticationViewModel,
+    viewModel: CreateAccountViewModel,
     navController: NavController
 ) {
-    val state by authenticationViewModel.createAccountLoginScreenState.collectAsState()
+    val state by viewModel.screenState.collectAsState()
+
+    val passwordFocusRequest = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     if (state.authenticated) navController.navigate(Screen.ContentScreen.route)
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 64.dp, start = 28.dp, end = 28.dp)
     ) {
-        Text(text = "Keep Connected")
-        Text(text = "Enter your email address and password to get access to yur account")
+        Text(
+            text = "Get Connected",
+            style = typography.h1
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Create an account by entering your email address and password")
+        Spacer(modifier = Modifier.height(20.dp))
+        StrapiTextField(
+            value = state.email,
+            onValueChanged = {
+                viewModel.updateAndValidateEmail(it)
+            },
+            placeholder = { Text(text = "Email Address") },
+            icon = Icons.Outlined.Email,
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    passwordFocusRequest.requestFocus()
+                }
+            )
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        StrapiTextField(
+            value = state.password,
+            onValueChanged = {
+                viewModel.updateAndValidatePassword(it)
+            },
+            placeholder = { Text(text = "Password") },
+            icon = Icons.Outlined.Lock,
+            keyboardType = KeyboardType.Password,
+            modifier = Modifier.focusRequester(passwordFocusRequest),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    keyboardController?.hide()
+                    if (state.buttonEnabled) {
+                        viewModel.createAccount()
+                    }
+                }
+            )
+        )
+        Spacer(modifier = Modifier.height(36.dp))
         StrapiButton(
             text = "Create Account",
-            onClick = { authenticationViewModel.createAccount() }
+            onClick = { viewModel.createAccount() }
         )
         LogoFooter()
     }

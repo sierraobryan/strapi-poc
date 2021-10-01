@@ -15,26 +15,17 @@ class AuthenticationRepository @Inject constructor(
 
     suspend fun authenticateWithGoogle(token: String): Boolean {
         val user = authInteractor.authWithGoogle(token = token)
-        if (user != null) {
-            return getAndSaveToken()
-        }
-        return false
+        return if (user != null) getAndSaveToken() else false
     }
 
     suspend fun signIn(email: String, password: String): Boolean {
         val user = authInteractor.signIn(email = email, password = password)
-        if (user != null) {
-            return getAndSaveToken()
-        }
-        return false
+        return if (user != null) getAndSaveToken() else false
     }
 
     suspend fun createAccount(email: String, password: String): Boolean {
         val user = authInteractor.createAccount(email = email, password = password)
-        if (user != null) {
-            return getAndSaveToken()
-        }
-        return false
+        return if (user != null) getAndSaveToken() else false
     }
 
     private suspend fun getAndSaveToken(): Boolean {

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.androiddevchallenge.ui.Screen
 import com.example.androiddevchallenge.ui.components.LogoFooter
+import com.example.androiddevchallenge.ui.components.SignInWithGoogle
 import com.example.androiddevchallenge.ui.components.StrapiButton
 import com.example.androiddevchallenge.ui.components.StrapiTextField
 import com.example.androiddevchallenge.ui.theme.typography
@@ -104,8 +105,7 @@ fun CreateAccountScreen(
             onClick = { viewModel.createAccount() }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        StrapiButton(
-            text = "Log in with Google",
+        SignInWithGoogle(
             onClick = { launcher.launch(viewModel.signInIntent) }
         )
         LogoFooter()
